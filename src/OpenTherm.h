@@ -81,6 +81,35 @@ enum OpenThermMessageID {
 	TdhwSet = 56, // f8.8  DHW setpoint (°C)    (Remote parameter 1)
 	MaxTSet, // f8.8  Max CH water setpoint (°C)  (Remote parameters 2)
 	Hcratio, // f8.8  OTC heat curve ratio (°C)  (Remote parameter 3)
+
+    // Brink Renovent HR - start
+ 
+    // Ventilation Specific Message IDs
+	VentStatus = 70, // flag8 / flag8  Master and Slave Status flags specific to Vent systems, READ STATUS V/H , HB0-HB3,LB0-LB5
+	VentNomVentSet, // _ / u8 Set the relative ventilation 0-100%, WRITE, CONTROL SETPOINT V/H
+	VentFault, // flag8 / flag8 Application specific fault flags, READ (u8) FAULT FLAGS/CODE V/H
+	VentOEMFault, // flag8 / flag8 Oem specific fault flags, DIAGNOSTIC CODE V/H,READ,U16
+	VentSlaveVentConfig = 74, // Slave Configuration Flags /  Slave MemberID Code, CONFIG/MEMBERID V/H,READ,U8  , HB0-HB2, LB
+	VentOTversion,  // f8.8 OPENTHERM VERSION V/H,READ, 0,127,“2,32”,Yes
+    VentVersionType,  // VERSION & TYPE V/H,READ,U8,0,255,1,U8,0,255,0,Yes
+	VentNomVent = 77, // _ / u8 Read the relative ventilation 0-100%, RELATIVE VENTILATION,READ,U8,0,255
+	VentRelHumid, // _ / u8 Read the relative humidity 0-100%, RELATIVE HUMIDITY,READ,U8,0,255, RELATIVE HUMIDITY,WRITE,U8,0,255
+	VentCO2level, // u16 CO2 level in PPM (0-2000), CO2 LEVEL,READ,U16,0,10000  , CO2 LEVEL,WRITE,U16,0,10000
+	VentTsupplyin, // f8.8 Supply Outlet temperature  SUPPLY INLET TEMPERATURE,READ,F8.8,0,127,“0,00”
+	VentTsupplyout, // f8.8 Supply Outlet temperature  SUPPLY OUTLET TEMPERATURE,READ,F8.8,0,127,“0,00”
+	VentTexhaustin,// f8.8 Exhaust Inlet temperature EXHAUST INLET TEMPERATURE,READ,F8.8,0,127,“0,00”
+	VentTexhaustout, // f8.8 Exhaust Outlet temperature  EXHAUST OUTLET TEMPERATURE,READ,F8.8,0,127,“0,00"
+	VentRPMexhaust, // u16 Actual RPM for inlet fan ACTUAL EXHAUST FAN SPEED,READ,U16,0,10000
+	VentRPMsupply, // u16 Actual RPM for supply fan ACTUAL INLET FAN SPEED”,READ,U16,0,10000
+	VentRemoteParam,  //  REMOTE PARAMETER SETTINGS V/H,READ,FLAG,  HBO, LBO
+	VentNomRelVent = 87, // _ / u8 Get the current relative ventilation NOMINAL VENTIALTION VALUE,READ,U8,0,255,  NOMINAL VENTIALTION VALUE,WRITE,U8,0,255
+	VentTSPNumber, // TSP NUMBER V/H,READ,U8,0,255,0,U8
+	VentTSPEntry,  // TSP ENTRY V/H,READ,U8,0,255,0,U8,0,255   TSP ENTRY V/H,WRITE,U8,0,255,0,U8,0,255
+	VentFaultBufferSize,  // FAULT BUFFER SIZE V/H ,READ,U8,0,255,0,U8,0,0,
+	VentFaultBufferEntry,  // FAULT BUFFER ENTRY V/H READ,U8,0,255,0,U8,0,255
+
+    // Brink Renovent HR - stop
+
 	RemoteOverrideFunction = 100, // flag8 / -  Function of manual and program changes in master and remote room setpoint.
 	OEMDiagnosticCode = 115, // u16  OEM-specific diagnostic/service code
 	BurnerStarts, // u16  Number of starts burner
@@ -109,7 +138,7 @@ enum OpenThermStatus {
 	RESPONSE_INVALID
 };
 
-// Brink Renovent HR specific codes
+// Brink Renovent HR specific codes - start
 enum BrinkTSPindex {
 	U1, 	// Volume Step 1
 	U2 = 2, // Volume Step 2
@@ -176,6 +205,7 @@ enum BrinkTSPindex {
 	TempPostHeater, // ?Temperature postheater 0 = 0°C (not active)
 	
 };
+// Brink Renovent HR specific codes - stop
 
 
 class OpenTherm
@@ -234,6 +264,7 @@ public:
     float getPressure();
     unsigned char getFault();
 
+    // Brink Renovent HR - start
 
 	//Ventilation systems requests
 	unsigned int getVentilation();
@@ -244,7 +275,7 @@ public:
 	float getVentExhaustOutTemperature();
 
 
-//Brink Renovent HR
+    //Brink Renovent HR
 	bool getFaultIndication();
 	bool getVentilationMode();
 	bool getBypassStatus();  // does not work
@@ -254,11 +285,13 @@ public:
 	bool getBypassPosition(); // does not work
 	bool getBypassMode(); // does not work 
 	
-//Brink Renovent HR
+    //Brink Renovent HR
 	uint8_t getBrinkTSP(BrinkTSPindex index) ;
 	bool setBrinkTSP(BrinkTSPindex index, uint8_t value);
 	unsigned int getVentRPM(OpenThermMessageID id);
 	uint8_t getVentFaultCode();
+
+    // Brink Renovent HR - stop
 
 private:
 	const int inPin;
